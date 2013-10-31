@@ -290,20 +290,38 @@ List.prototype.appendTo = function(val){
 };
 
 /**
- * Insert self's `els` after `val`
+ * Insert `val` before self's `.els`.
  *
  * @param {String|Element|List} val
- * @return {List} self
+ * @return {List}
  * @api public
  */
 
-List.prototype.insertAfter = function(val){
-  val = dom(val).els[0];
-  if (!val || !val.parentNode) return this;
-  this.forEach(function(el){
-    val.parentNode.insertBefore(el, val.nextSibling);
+List.prototype.before = function(val){
+  var els = dom(val).fragment();
+  return this.forEach(function(el){
+    var node = el.parentNode;
+    if (!node) return;
+    node.insertBefore(els, el);
   });
-  return this;
+};
+
+/**
+ * Insert `val` after self's `.els`
+ *
+ * @param {String|Element|List} val
+ * @return {List}
+ * @api public
+ */
+
+List.prototype.after = function(val){
+  var els = dom(val).fragment();
+  return this.forEach(function(el){
+    var node = el.parentNode;
+    if (!node) return;
+    el = el.nextSibling;
+    node.insertBefore(els, el);
+  });
 };
 
 /**
@@ -800,6 +818,42 @@ List.prototype.previous = function(selector, limit){
     limit
     || 1));
 };
+
+/**
+ * Get this list as a DocumentFragment.
+ *
+ * @return {DocumentFragment}
+ * @api public
+ */
+
+List.prototype.fragment = function(){
+  var el = document.createDocumentFragment();
+
+  for (var i = 0; i < this.els.length; ++i) {
+    el.appendChild(this.els[i]);
+  }
+
+  return el;
+};
+
+/**
+ * Insert self's `.els` after / before `val`.
+ *
+ * @param {String|List|Element} val
+ * @return {List}
+ * @api public
+ */
+
+['after', 'before'].forEach(function(name){
+  var method = 'insert'
+    + name[0].toUpperCase()
+    + name.slice(1);
+
+  List.prototype[method] = function(els){
+    dom(els)[name](this);
+    return this;
+  };
+});
 
 /**
  * Attribute accessors.

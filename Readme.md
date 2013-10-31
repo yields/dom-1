@@ -90,11 +90,46 @@ dom('ul')
 
 ### .insertAfter(list)
 
-  Insert after:
+  Insert self after `list`
 
 ```js
-dom('<div></div>')
-  .insertAfter('body');
+dom('<em>b</em>')
+  .insertAfter('<em>a</em>');
+
+// => "<em>a</em><em>b</em>"
+```
+
+### .insertBefore(list)
+
+  Insert self before `list`
+
+```js
+dom('<em>a')
+  .insertBefore('<em>b');
+
+// => "<em>a</em><em>b</em>"
+```
+
+### .after(list)
+
+  Insert `list` after self
+
+```js
+dom('<em>a</em>')
+  .after('<em>b</em>');
+
+// => "<em>a</em><em>b</em>"
+```
+
+### .before(list)
+
+  Insert `list` before `self`
+
+```js
+dom('<em>b</em>')
+  .before('<em>a</em>');
+
+// => "<em>a</em><em>b</em>"
 ```
 
 ### .on(event, fn, [capture])
@@ -378,6 +413,10 @@ dom('ul li').last().remove();
 ### .at(i)
 
   Return a `List` containing the `i`th element.
+
+### .fragment()
+
+  Get a document fragment containing self's `.els`
 
 ## Enumerable
 

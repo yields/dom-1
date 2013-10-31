@@ -27,7 +27,7 @@ describe('dom()', function(){
             <em>Hello</em>');
       assert('Hello' == list.get(0).textContent);
     })
-    
+
     it('should not clean the right', function(){
       var list = dom('  <em>Hello  ');
       assert('Hello  ' == list.get(0).textContent);
@@ -108,6 +108,45 @@ describe('.append()', function(){
   })
 })
 
+describe('.fragment()', function(){
+  it('should return a document fragment', function(){
+    var list = dom('<em>a</em><em>b</em>');
+    var els = list.fragment();
+    assert('a' == dom(els.childNodes[0]).text());
+    assert('b' == dom(els.childNodes[1]).text());
+  })
+})
+
+describe('.after()', function(){
+  it('should return itself for chaining', function(){
+    var list = dom('<div>');
+    assert(list == list.after('<em>'));
+  })
+
+  it('should insert the element(s)', function(){
+    var list = dom('<div>');
+    var a = dom('<em>a');
+    list.append(a);
+    a.after('<em>b');
+    assert('<em>a</em><em>b</em>' == list.html());
+  })
+})
+
+describe('.before()', function(){
+  it('should return itself for chaining', function(){
+    var list = dom('<div>');
+    assert(list == list.before('<em>'));
+  })
+
+  it('should insert the element(s)', function(){
+    var list = dom('<div>');
+    var b = dom('<em>b');
+    list.append(b);
+    b.before('<em>a');
+    assert('<em>a</em><em>b</em>' == list.html());
+  })
+})
+
 describe('.insertAfter()', function(){
   it('should return itself for chaining', function(){
     var list = dom('<div></div>');
@@ -121,6 +160,21 @@ describe('.insertAfter()', function(){
     dom('<p>Two</p>').insertAfter(one);
 
     assert('<p>One</p><p>Two</p>' == container.html());
+  })
+})
+
+describe('.insertBefore()', function(){
+  it('should return itself for chaining', function(){
+    var list = dom('<div>');
+    assert(list == list.insertBefore('<p>'));
+  })
+
+  it('should insert the element(s)', function(){
+    var el = dom('<div>');
+    var b = dom('<em>b</em>');
+    el.append(b);
+    dom('<em>a').insertBefore(b);
+    assert('<em>a</em><em>b</em>' == el.html());
   })
 })
 
